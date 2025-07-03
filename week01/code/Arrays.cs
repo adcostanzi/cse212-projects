@@ -13,7 +13,17 @@ public static class Arrays
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return []; // replace this return statement with your own
+        // Initialize the array that will store the multiples, size will be the length input by the user
+        var result = new double[length];
+        // I will start by creating a loop where the counter starts as 1 and adds 1 each interation until the counter is bigger than length
+        for (int i = 1; i < length+1; i++)
+        {
+            // I will mutiply the number by the counter and save the multiple in the array
+            double calculation = number * i;
+            result[i-1] = calculation;
+        }
+
+        return result; // replace this return statement with your own
     }
 
     /// <summary>
@@ -29,5 +39,18 @@ public static class Arrays
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+
+        // Create a loop by the amount input
+        for (int i = 0; i < amount; i++)
+        {
+            // Save the last value of the array into a variable, which will be inserted at the beginning of the list
+            int toInsert = data[data.Count() - 1];
+            // Remove the last value of the array
+            data.RemoveAt(data.Count() - 1);
+            // Insert the variable value into the beginning of the array
+            data.Insert(0, toInsert);
+        }
+       
+
     }
 }
