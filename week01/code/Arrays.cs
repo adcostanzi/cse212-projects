@@ -15,15 +15,15 @@ public static class Arrays
 
         // Initialize the array that will store the multiples, size will be the length input by the user
         var result = new double[length];
-        // I will start by creating a loop where the counter starts as 1 and adds 1 each interation until the counter is bigger than length
+        // Start by creating a loop where the counter starts as 1 and adds 1 each interation until the counter is bigger than length
         for (int i = 1; i < length+1; i++)
         {
-            // I will mutiply the number by the counter and save the multiple in the array
+            // Mutiply the number by the counter and save the multiple in the array
             double calculation = number * i;
             result[i-1] = calculation;
         }
 
-        return result; // replace this return statement with your own
+        return result; // return result
     }
 
     /// <summary>
