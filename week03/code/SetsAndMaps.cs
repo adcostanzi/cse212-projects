@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 
 public static class SetsAndMaps
@@ -21,8 +22,34 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        HashSet<string> check = new HashSet<string>();
+        List<string> results = new List<string>();
+
+        foreach (string word in words)
+        {
+            if (!check.Contains(word))
+            {
+                string newWord = $"{word[1]}{word[0]}";
+
+                if (check.Contains(newWord))
+                {
+                    results.Add($"{newWord} & {word}");
+                }
+                else
+                {
+                    check.Add(word);
+                }
+            }
+        }
+
+        string[] finalResults = new string[results.Count];
+
+        for (int i = 0; i < results.Count; i++)
+        {
+            finalResults[i] = results[i];
+        }
+
+        return finalResults;
     }
 
     /// <summary>
@@ -42,7 +69,14 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            if (degrees.ContainsKey(fields[3]))
+            {
+                degrees[fields[3]] += 1;
+            }
+            else
+            {
+                degrees.Add(fields[3], 1);
+            }
         }
 
         return degrees;
@@ -67,7 +101,40 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        int longer = Math.Max(word1.Length, word2.Length);
+
+        Dictionary<char, int> storage = new Dictionary<char, int>();
+
+        for (int i = 0; i < longer; i++)
+        {
+            if (i < word1.Length && word1[i] != ' ')
+            {
+                char char1 = Char.ToLower(word1[i]);
+                if (storage.ContainsKey(char1))
+                {
+                    storage[char1]++;
+                }
+                else
+                {
+                    storage.Add(char1, 1);
+                }
+            }
+            if (i < word2.Length && word2[i] != ' ')
+            {
+                char char2 = Char.ToLower(word2[i]);
+
+                if (storage.ContainsKey(char2))
+                {
+                    storage[char2]--;
+                }
+                else
+                {
+                    storage.Add(char2, -1);
+                }
+            }
+        }
+        return storage.Values.All(v => v == 0);
+
     }
 
     /// <summary>
@@ -96,11 +163,65 @@ public static class SetsAndMaps
 
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
 
+        string[] finalData = new string[featureCollection.Features.Count()];
+        int i = 0;
+
+        foreach (var feature in featureCollection.Features)
+        {
+            string place = feature.Properties["place"].ToString();
+            var magElement = (JsonElement)feature.Properties["mag"];
+            decimal mag = magElement.GetDecimal();
+
+            string newLine = $"{place} - Mag {mag}";
+
+            finalData[i] = newLine;
+
+            i++;
+        }
         // TODO Problem 5:
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
         // 3. Return an array of these string descriptions.
-        return [];
+        return finalData;
+    }
+
+    public class FeatureCollection
+    {
+        public string Type { get; set; }
+        public Metadata Metadata { get; set; }
+        public Feature[] Features { get; set; }
+    }
+
+    public class Metadata
+    {
+        public long Generated { get; set; }
+        public string Url { get; set; }
+        public string Title { get; set; }
+        public int Status { get; set; }
+        public string Api { get; set; }
+        public int Count { get; set; }
+    }
+    public class Feature
+    {
+        public string Type { get; set; }
+        public Dictionary<string, object> Properties { get; set; }
+        public Geometry Geometry { get; set; }
+        public string Id { get; set; }
+    }
+
+    public class Properties
+    {
+        // public decimal Mag => Convert.ToDecimal(Data["Mag"]);
+        // public string Place => Data["Place"].ToString();
+    
+        public Dictionary<string, object> Data { get; set; }
+    }
+
+    public class Geometry
+    {
+        public string Type { get; set; }
+        public double[] Coordinates { get; set; }
+
     }
 }
